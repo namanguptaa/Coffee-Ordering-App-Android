@@ -1,5 +1,7 @@
 package com.example.justjavathings;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
-        // Edit text object and input
+        //  Edit text object and input
         EditText nameEditText = (EditText) findViewById(R.id.name_field);
         String name = nameEditText.getText().toString();
         Log.v("Main Activity", "Name: " + name);
@@ -48,7 +50,16 @@ public class MainActivity extends AppCompatActivity {
 
         // function call: createOrderSummary(args: name, price, haswhippedcream, haschocolate);
         String priceMessage = createOrderSummary(name, orderPrice, hasWhippedCream, hasChocolate);
-        displayMessage(priceMessage);
+        //  displayMessage(priceMessage);
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        //intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Just Java ordering app");
+        intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 
     // This method is called when the plus button is clicked.
