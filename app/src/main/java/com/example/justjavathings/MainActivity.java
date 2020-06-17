@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +16,7 @@ import java.text.NumberFormat;
  * This app displays an order form to order coffee.
  */
 public class MainActivity extends AppCompatActivity {
-    int quantity = 0, toppings = 0;
+    int quantity = 2, toppings = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,16 +50,33 @@ public class MainActivity extends AppCompatActivity {
         String priceMessage = createOrderSummary(name, orderPrice, hasWhippedCream, hasChocolate);
         displayMessage(priceMessage);
     }
+
     // This method is called when the plus button is clicked.
     public void increment(View view) {
-        quantity = quantity + 1;
+
+        if (quantity == 100) {
+
+            Toast.makeText(MainActivity.this, "Aah, you exceeded the capacity to order the coffee",
+                    Toast.LENGTH_LONG).show();
+            display(100);
+        } else // or use return; in if() statement
+            quantity = quantity + 1;
         display(quantity);
     }
+
     // This method is called when the order button is clicked.
     public void decrement(View view) {
-        quantity = quantity - 1;
+
+        if (quantity == 1) {
+            Toast.makeText(MainActivity.this, "You cannot order less than 1 cups!",
+                    Toast.LENGTH_LONG).show();
+            display(1);
+        } else // or use return; in if() statement
+            quantity = quantity - 1;
         display(quantity);
     }
+
+
     /**
      * This method displays the given quantity value on the screen.
      */
@@ -86,9 +104,9 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Create summary of the order.
      *
-     * @param hasWhippedCream is whether or not the user wants whipped cream topping
-     * @param hasChocolate    is whether or not the user wants chocolate topping
-     * @param price           of the order
+     * @param addWhippedCream is whether or not the user wants whipped cream topping
+     * @param addChocolate    is whether or not the user wants chocolate topping
+     * @param *price          of the order
      * @return text summary
      */
     private int calculatePrice(boolean addWhippedCream, boolean addChocolate) {
